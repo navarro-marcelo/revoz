@@ -1,0 +1,102 @@
+export type PhraseCategory = {
+  id: string;
+  label: string;
+  icon: string;
+  phrases: string[];
+};
+
+export const phraseCategories: PhraseCategory[] = [
+  {
+    id: 'saude',
+    label: 'Saude',
+    icon: '🏥',
+    phrases: [
+      'Estou com dor',
+      'Preciso do remedio',
+      'Chama o medico',
+      'Estou com dor de cabeca',
+      'Estou com dor no peito',
+      'Estou com falta de ar',
+      'Estou me sentindo mal',
+      'Preciso ir ao hospital',
+      'Estou com febre',
+      'Estou com tontura',
+      'Preciso medir a pressao',
+      'Estou com nausea',
+    ],
+  },
+  {
+    id: 'necessidades',
+    label: 'Necessidades',
+    icon: '🍽️',
+    phrases: [
+      'Estou com fome',
+      'Estou com sede',
+      'Quero ir ao banheiro',
+      'Estou com frio',
+      'Estou com calor',
+      'Quero dormir',
+      'Me ajuda a levantar',
+      'Quero tomar banho',
+      'Quero trocar de roupa',
+      'Quero agua',
+      'Me ajuda a sentar',
+    ],
+  },
+  {
+    id: 'social',
+    label: 'Social',
+    icon: '💬',
+    phrases: [
+      'Obrigada',
+      'Obrigado',
+      'Sim',
+      'Nao',
+      'Nao sei',
+      'Bom dia',
+      'Boa tarde',
+      'Boa noite',
+      'Te amo',
+      'Sinto sua falta',
+      'Por favor',
+      'Desculpa',
+      'Ate logo',
+    ],
+  },
+  {
+    id: 'sentimentos',
+    label: 'Sentimentos',
+    icon: '❤️',
+    phrases: [
+      'Estou feliz',
+      'Estou triste',
+      'Estou com medo',
+      'Estou cansada',
+      'Estou nervosa',
+      'Estou bem',
+      'Estou ansiosa',
+      'Estou com saudade',
+      'Estou preocupada',
+      'Estou com raiva',
+    ],
+  },
+  {
+    id: 'pedidos',
+    label: 'Pedidos',
+    icon: '🙏',
+    phrases: [
+      'Liga para minha familia',
+      'Quero ver televisao',
+      'Abre a janela',
+      'Fecha a janela',
+      'Aumenta o volume',
+      'Abaixa o volume',
+      'Acende a luz',
+      'Apaga a luz',
+      'Liga o ventilador',
+      'Desliga o ventilador',
+      'Me da o controle',
+      'Muda o canal',
+    ],
+  },
+];

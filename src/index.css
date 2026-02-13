@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --color-key-bg: #E5E7EB;
+  --color-key-text: #000000;
+  --color-key-active: #D1D5DB;
+  --color-speak: #16A34A;
+  --color-speak-hover: #15803D;
+  --color-clear: #DC2626;
+  --color-clear-hover: #B91C1C;
+  --color-suggestion: #2563EB;
+  --color-suggestion-hover: #1D4ED8;
+  --color-phrase: #7C3AED;
+  --color-phrase-hover: #6D28D9;
+  --color-delete-word: #EA580C;
+  --color-display-bg: #F9FAFB;
+  --color-overlay: rgba(0, 0, 0, 0.5);
+}
+
+* {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  touch-action: manipulation;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+}
