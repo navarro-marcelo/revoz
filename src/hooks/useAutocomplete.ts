@@ -8,6 +8,7 @@ import {
   normalize,
 } from '../utils/textProcessor';
 import { loadUserDictionary, saveUserWord } from '../utils/storageManager';
+import { toAccented } from '../data/accentMap';
 
 export function useAutocomplete(currentText: string) {
   const prefixIndex = useRef<Map<string, DictionaryEntry[]> | null>(null);
@@ -46,7 +47,7 @@ export function useAutocomplete(currentText: string) {
         return bigramEntries
           .sort((a, b) => b.score - a.score)
           .slice(0, 5)
-          .map((b) => b.second);
+          .map((b) => toAccented(b.second));
       }
       return [];
     }
@@ -104,7 +105,7 @@ export function useAutocomplete(currentText: string) {
     return [...seen.values()]
       .sort((a, b) => b.frequency - a.frequency)
       .slice(0, 5)
-      .map((c) => c.word);
+      .map((c) => toAccented(c.word));
   }, [currentText, userDictVersion]);
 
   return { suggestions, learnWord };
