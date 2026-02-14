@@ -27,7 +27,7 @@ export function QuickPhrases({ onSelectPhrase, onClose }: QuickPhrasesProps) {
       <div className="bg-white rounded-2xl w-[85%] h-[85%] flex flex-col shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 bg-gray-100 border-b">
-          <h2 className="text-2xl font-bold">FRASES RAPIDAS</h2>
+          <h2 className="text-2xl font-bold">FRASES RÁPIDAS</h2>
           <ActionButton
             label="FECHAR"
             icon="✕"
