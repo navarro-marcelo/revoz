@@ -8,6 +8,7 @@ export interface AppSettings {
 const SETTINGS_KEY = 'revoz-settings';
 const RECENT_KEY = 'revoz-recent-phrases';
 const USER_DICT_KEY = 'revoz-user-dictionary';
+const SAVED_PHRASES_KEY = 'revoz-saved-phrases';
 
 export const defaultSettings: AppSettings = {
   voiceSpeed: 0.85,
@@ -85,6 +86,37 @@ export function saveUserWord(word: string): void {
     // Keep max 500 user words
     const trimmed = dict.slice(-500);
     localStorage.setItem(USER_DICT_KEY, JSON.stringify(trimmed));
+  } catch {
+    // ignore
+  }
+}
+
+export function loadSavedPhrases(): string[] {
+  try {
+    const stored = localStorage.getItem(SAVED_PHRASES_KEY);
+    if (stored) return JSON.parse(stored);
+  } catch {
+    // ignore
+  }
+  return [];
+}
+
+export function savePhraseToBank(phrase: string): void {
+  try {
+    const phrases = loadSavedPhrases();
+    if (phrases.includes(phrase)) return;
+    phrases.unshift(phrase);
+    const trimmed = phrases.slice(0, 50);
+    localStorage.setItem(SAVED_PHRASES_KEY, JSON.stringify(trimmed));
+  } catch {
+    // ignore
+  }
+}
+
+export function deleteSavedPhrase(phrase: string): void {
+  try {
+    const phrases = loadSavedPhrases().filter((p) => p !== phrase);
+    localStorage.setItem(SAVED_PHRASES_KEY, JSON.stringify(phrases));
   } catch {
     // ignore
   }

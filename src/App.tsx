@@ -9,13 +9,14 @@ import { useSpeech } from './hooks/useSpeech';
 import { useAutocomplete } from './hooks/useAutocomplete';
 import { useSettings } from './hooks/useSettings';
 import { replacePartialWord, deleteLastWord, getCurrentPartialWord, normalize } from './utils/textProcessor';
-import { saveRecentPhrase } from './utils/storageManager';
+import { saveRecentPhrase, savePhraseToBank } from './utils/storageManager';
 
 interface AppState {
   currentText: string;
   showQuickPhrases: boolean;
   showSettings: boolean;
   showClearConfirm: boolean;
+  showSavePrompt: boolean;
 }
 
 type Action =
@@ -28,18 +29,20 @@ type Action =
   | { type: 'SELECT_PHRASE'; phrase: string }
   | { type: 'TOGGLE_QUICK_PHRASES' }
   | { type: 'TOGGLE_SETTINGS' }
-  | { type: 'TOGGLE_CLEAR_CONFIRM' };
+  | { type: 'TOGGLE_CLEAR_CONFIRM' }
+  | { type: 'SHOW_SAVE_PROMPT' }
+  | { type: 'HIDE_SAVE_PROMPT' };
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
     case 'APPEND_CHAR':
-      return { ...state, currentText: state.currentText + action.char };
+      return { ...state, currentText: state.currentText + action.char, showSavePrompt: false };
     case 'DELETE_CHAR':
-      return { ...state, currentText: state.currentText.slice(0, -1) };
+      return { ...state, currentText: state.currentText.slice(0, -1), showSavePrompt: false };
     case 'DELETE_WORD':
-      return { ...state, currentText: deleteLastWord(state.currentText) };
+      return { ...state, currentText: deleteLastWord(state.currentText), showSavePrompt: false };
     case 'CLEAR_TEXT':
-      return { ...state, currentText: '', showClearConfirm: false };
+      return { ...state, currentText: '', showClearConfirm: false, showSavePrompt: false };
     case 'ADD_SPACE':
       return {
         ...state,
@@ -51,6 +54,7 @@ function reducer(state: AppState, action: Action): AppState {
       return {
         ...state,
         currentText: replacePartialWord(state.currentText, action.word),
+        showSavePrompt: false,
       };
     case 'SELECT_PHRASE':
       return {
@@ -64,6 +68,10 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, showSettings: !state.showSettings };
     case 'TOGGLE_CLEAR_CONFIRM':
       return { ...state, showClearConfirm: !state.showClearConfirm };
+    case 'SHOW_SAVE_PROMPT':
+      return { ...state, showSavePrompt: true };
+    case 'HIDE_SAVE_PROMPT':
+      return { ...state, showSavePrompt: false };
     default:
       return state;
   }
@@ -74,6 +82,7 @@ const initialState: AppState = {
   showQuickPhrases: false,
   showSettings: false,
   showClearConfirm: false,
+  showSavePrompt: false,
 };
 
 export default function App() {
@@ -97,11 +106,18 @@ export default function App() {
           text={state.currentText}
           fontSize={settings.fontSize}
           isSpeaking={isSpeaking}
+          showSavePrompt={state.showSavePrompt}
           onSpeak={() => {
             learnCurrentWords(state.currentText);
             speak(state.currentText);
+            dispatch({ type: 'SHOW_SAVE_PROMPT' });
           }}
           onStop={stop}
+          onSavePhrase={() => {
+            const text = state.currentText.trim();
+            if (text) savePhraseToBank(text);
+            dispatch({ type: 'HIDE_SAVE_PROMPT' });
+          }}
           onDeleteWord={() => dispatch({ type: 'DELETE_WORD' })}
           onClear={() => dispatch({ type: 'TOGGLE_CLEAR_CONFIRM' })}
           onOpenPhrases={() => dispatch({ type: 'TOGGLE_QUICK_PHRASES' })}

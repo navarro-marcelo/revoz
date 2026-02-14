@@ -3,7 +3,7 @@ import { useRef, useCallback } from 'react';
 interface ActionButtonProps {
   label: string;
   onClick: () => void;
-  variant?: 'key' | 'speak' | 'clear' | 'suggestion' | 'phrase' | 'delete-word' | 'default';
+  variant?: 'key' | 'speak' | 'clear' | 'suggestion' | 'phrase' | 'delete-word' | 'save' | 'default';
   icon?: string;
   disabled?: boolean;
   className?: string;
@@ -32,6 +32,7 @@ const variantStyles: Record<string, string> = {
   suggestion: 'bg-suggestion text-white',
   phrase: 'bg-phrase text-white',
   'delete-word': 'bg-delete-word text-white',
+  save: 'bg-save text-white',
   default: 'bg-gray-200 text-gray-800',
 };
 

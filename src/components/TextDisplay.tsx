@@ -5,8 +5,10 @@ interface TextDisplayProps {
   text: string;
   fontSize: number;
   isSpeaking: boolean;
+  showSavePrompt: boolean;
   onSpeak: () => void;
   onStop: () => void;
+  onSavePhrase: () => void;
   onDeleteWord: () => void;
   onClear: () => void;
   onOpenPhrases: () => void;
@@ -23,8 +25,10 @@ export function TextDisplay({
   text,
   fontSize,
   isSpeaking,
+  showSavePrompt,
   onSpeak,
   onStop,
+  onSavePhrase,
   onDeleteWord,
   onClear,
   onOpenPhrases,
@@ -55,6 +59,14 @@ export function TextDisplay({
           icon="⏹"
           onClick={onStop}
           variant="clear"
+          className="px-5 text-lg shrink-0"
+        />
+      ) : showSavePrompt ? (
+        <ActionButton
+          label="SALVAR"
+          icon="⭐"
+          onClick={onSavePhrase}
+          variant="save"
           className="px-5 text-lg shrink-0"
         />
       ) : (
