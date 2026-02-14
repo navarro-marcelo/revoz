@@ -28,22 +28,7 @@ export async function fetchVoices(): Promise<ElevenLabsVoiceInfo[]> {
   }
 
   const data = await res.json();
-  const voices: ElevenLabsVoiceInfo[] = data.voices ?? [];
-
-  return voices.filter((v) => {
-    const lang = v.labels?.language ?? '';
-    const accent = v.labels?.accent ?? '';
-    const useCase = v.labels?.use_case ?? '';
-    return (
-      lang === 'pt' ||
-      lang === 'Portuguese' ||
-      lang === 'portuguese' ||
-      accent.toLowerCase().includes('brazil') ||
-      accent.toLowerCase().includes('brasil') ||
-      useCase === 'multilingual' ||
-      v.category === 'cloned'
-    );
-  });
+  return (data.voices ?? []) as ElevenLabsVoiceInfo[];
 }
 
 export async function synthesizeSpeech(

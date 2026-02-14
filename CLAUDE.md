@@ -27,13 +27,16 @@ src/
 │   └── TextDisplay.tsx        # Area de texto + botoes de acao
 ├── hooks/
 │   ├── useAutocomplete.ts     # Predicao de palavras (prefixo + bigramas)
+│   ├── useElevenLabsVoices.ts # Lista vozes disponiveis da ElevenLabs
 │   ├── useSettings.ts         # Configuracoes persistidas em localStorage
-│   └── useSpeech.ts           # Sintese de voz (Web Speech API)
+│   └── useSpeech.ts           # Sintese de voz (Web Speech API + ElevenLabs)
 ├── data/
 │   ├── accentMap.ts           # Mapeamento normalizado -> acentuado (345 entradas)
 │   ├── bigrams.ts             # Pares de palavras com score (contexto linguistico)
 │   ├── dictionary.ts          # Vocabulario portugues com frequencia (~500+ palavras)
 │   └── phrases.ts             # Frases rapidas organizadas em 5 categorias
+├── services/
+│   └── elevenLabsApi.ts       # Cliente API ElevenLabs (vozes + sintese)
 └── utils/
     ├── storageManager.ts      # CRUD localStorage (settings, frases, dicionario)
     └── textProcessor.ts       # Funcoes puras de manipulacao de texto
@@ -137,11 +140,17 @@ Modal com abas de categorias de frases:
 
 ### SettingsPanel
 
-- Velocidade da voz: 0.5 - 1.5 (padrao 0.85)
-- Tom da voz: 0.5 - 2.0 (padrao 1.0)
+- **Motor de voz:** NAVEGADOR (padrao) / ELEVENLABS (requer API key)
+- Quando ElevenLabs selecionado:
+  - Origem da voz: PRE-DEFINIDA (dropdown) / VOZ PERSONALIZADA (ID manual)
+  - Modelo: MULTILINGUAL V2 (qualidade) / TURBO V2.5 (latencia) — so para voz personalizada
+  - Velocidade e tom ficam ocultos (nao se aplicam ao ElevenLabs)
+- Quando Navegador selecionado:
+  - Velocidade da voz: 0.5 - 1.5 (padrao 0.85)
+  - Tom da voz: 0.5 - 2.0 (padrao 1.0)
 - Tamanho da fonte: Normal / Grande / Muito Grande
 - Som das teclas: ligado/desligado
-- Botao testar voz
+- Botao testar voz (usa motor ativo)
 - Botao restaurar padroes
 
 ### ConfirmModal
@@ -154,10 +163,18 @@ Modal generico com mensagem + botoes SIM / NAO.
 
 ### useSpeech(settings)
 
-Sintese de voz via Web Speech API.
-- Detecta melhor voz portuguesa (pt-BR preferido, fallback pt)
-- Retorna: `{ speak, stop, isSpeaking, voiceReady }`
-- Cancela utterance anterior automaticamente
+Sintese de voz com dois motores: **Web Speech API** (padrao) e **ElevenLabs** (opcional).
+- Detecta melhor voz portuguesa (pt-BR preferido, fallback pt) para Web Speech
+- Retorna: `{ speak, stop, isSpeaking, voiceReady }` (mesma interface para ambos motores)
+- Cancela utterance/audio anterior automaticamente
+- **Fallback silencioso:** se ElevenLabs falhar (rede, quota, erro), usa Web Speech sem intervencao do usuario
+- `stop()` cancela tanto `speechSynthesis` quanto `AbortController` + `HTMLAudioElement`
+
+### useElevenLabsVoices()
+
+Lista vozes disponiveis da API ElevenLabs para o dropdown de configuracoes.
+- So faz fetch se a API key estiver configurada
+- Retorna: `{ voices, loading, error }`
 
 ### useAutocomplete(currentText)
 
@@ -243,6 +260,44 @@ Pares de palavras com score (1-10) para predicao contextual. Ex: "eu" → "quero
 --color-display-bg: #F9FAFB   /* fundo area de texto */
 --color-overlay: rgba(0,0,0,0.5)
 ```
+
+---
+
+## ElevenLabs (Opcional)
+
+O app suporta vozes de alta qualidade via **ElevenLabs** como alternativa ao Web Speech API do navegador. Sem configuracao, o app funciona normalmente com Web Speech.
+
+### Setup
+
+1. Crie uma conta em [elevenlabs.io](https://elevenlabs.io) (plano gratuito: 10.000 caracteres/mes)
+2. Acesse **Profile + API key** e crie uma chave com permissoes:
+   - **Text to Speech:** Access
+   - **Voices:** Read
+   - Todos os outros endpoints: No Access
+3. Copie `.env.example` para `.env.local` e preencha sua chave:
+   ```
+   VITE_ELEVENLABS_API_KEY=sk_sua_chave_aqui
+   ```
+4. Reinicie o servidor de desenvolvimento (`npm run dev`)
+5. Na app, abra Configuracoes → selecione **ELEVENLABS** como motor de voz
+
+### Arquitetura
+
+- **`src/services/elevenLabsApi.ts`** — Cliente API stateless (listagem de vozes + sintese TTS)
+- **`src/hooks/useElevenLabsVoices.ts`** — Hook para popular dropdown de vozes no SettingsPanel
+- **`src/hooks/useSpeech.ts`** — Strategy pattern: delega para Web Speech ou ElevenLabs com fallback silencioso
+
+### Fallback (3 niveis)
+
+1. **Sem API key:** toggle ELEVENLABS fica desabilitado, Web Speech usado normalmente
+2. **Erro de API** (rede, 401, 429, 500): fallback automatico para Web Speech, sem erro visivel
+3. **Erro de playback** (audio element): mesmo fallback silencioso
+
+### Vozes personalizadas
+
+Para usar voice cloning, selecione **VOZ PERSONALIZADA** nas configuracoes e cole o Voice ID do painel ElevenLabs. Modelos disponiveis:
+- `eleven_multilingual_v2` — maior qualidade (padrao)
+- `eleven_turbo_v2_5` — menor latencia
 
 ---
 
