@@ -1,8 +1,18 @@
+export type VoiceProvider = 'browser' | 'elevenlabs';
+export type ElevenLabsVoiceSource = 'prebuilt' | 'custom';
+
 export interface AppSettings {
   voiceSpeed: number;
   pitch: number;
   fontSize: number;
   keySound: boolean;
+  voiceProvider: VoiceProvider;
+  elevenLabsVoiceId: string;
+  elevenLabsVoiceName: string;
+  elevenLabsVoiceSource: ElevenLabsVoiceSource;
+  elevenLabsCustomVoiceId: string;
+  elevenLabsCustomVoiceName: string;
+  elevenLabsModelId: string;
 }
 
 const SETTINGS_KEY = 'revoz-settings';
@@ -15,6 +25,13 @@ export const defaultSettings: AppSettings = {
   pitch: 1.0,
   fontSize: 1,
   keySound: true,
+  voiceProvider: 'browser',
+  elevenLabsVoiceId: '',
+  elevenLabsVoiceName: '',
+  elevenLabsVoiceSource: 'prebuilt',
+  elevenLabsCustomVoiceId: '',
+  elevenLabsCustomVoiceName: '',
+  elevenLabsModelId: 'eleven_multilingual_v2',
 };
 
 export function loadSettings(): AppSettings {
