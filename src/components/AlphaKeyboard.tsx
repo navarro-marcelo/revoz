@@ -6,6 +6,7 @@ interface AlphaKeyboardProps {
   onSpace: () => void;
   onDelete: () => void;
   keySound: boolean;
+  onSpeakLetter?: (char: string) => void;
 }
 
 const ALPHA_ROW1 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
@@ -16,7 +17,7 @@ const NUM_ROW1 = ['1', '2', '3'];
 const NUM_ROW2 = ['4', '5', '6'];
 const NUM_ROW3 = ['7', '8', '9'];
 
-export function AlphaKeyboard({ onChar, onSpace, onDelete, keySound }: AlphaKeyboardProps) {
+export function AlphaKeyboard({ onChar, onSpace, onDelete, keySound, onSpeakLetter }: AlphaKeyboardProps) {
   const [showNumbers, setShowNumbers] = useState(false);
 
   if (showNumbers) {
@@ -28,7 +29,7 @@ export function AlphaKeyboard({ onChar, onSpace, onDelete, keySound }: AlphaKeyb
               <ActionButton
                 key={num}
                 label={num}
-                onClick={() => onChar(num)}
+                onClick={() => { onChar(num); onSpeakLetter?.(num); }}
                 variant="key"
                 keySound={keySound}
                 className="flex-1 text-5xl"
@@ -39,7 +40,7 @@ export function AlphaKeyboard({ onChar, onSpace, onDelete, keySound }: AlphaKeyb
         <div className="flex gap-2 flex-1">
           <ActionButton
             label="0"
-            onClick={() => onChar('0')}
+            onClick={() => { onChar('0'); onSpeakLetter?.('0'); }}
             variant="key"
             keySound={keySound}
             className="flex-1 text-5xl"
@@ -72,7 +73,7 @@ export function AlphaKeyboard({ onChar, onSpace, onDelete, keySound }: AlphaKeyb
             <ActionButton
               key={letter}
               label={letter}
-              onClick={() => onChar(letter.toLowerCase())}
+              onClick={() => { onChar(letter.toLowerCase()); onSpeakLetter?.(letter.toLowerCase()); }}
               variant="key"
               keySound={keySound}
               className="flex-1 text-4xl"

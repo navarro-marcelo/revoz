@@ -153,5 +153,16 @@ export function useSpeech(settings: AppSettings) {
     setIsSpeaking(false);
   }, []);
 
-  return { speak, stop, isSpeaking, voiceReady };
+  const speakLetter = useCallback((name: string) => {
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(name);
+    utterance.rate = 1.5;
+    utterance.lang = 'pt-BR';
+    if (voiceRef.current) {
+      utterance.voice = voiceRef.current;
+    }
+    speechSynthesis.speak(utterance);
+  }, []);
+
+  return { speak, stop, speakLetter, isSpeaking, voiceReady };
 }

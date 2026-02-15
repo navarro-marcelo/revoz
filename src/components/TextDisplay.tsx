@@ -61,20 +61,21 @@ export function TextDisplay({
           variant="clear"
           className="px-5 text-lg shrink-0"
         />
-      ) : showSavePrompt ? (
-        <ActionButton
-          label="SALVAR"
-          icon="⭐"
-          onClick={onSavePhrase}
-          variant="save"
-          className="px-5 text-lg shrink-0"
-        />
       ) : (
         <ActionButton
           label="FALAR"
           icon="🔊"
           onClick={onSpeak}
           variant="speak"
+          className="px-5 text-lg shrink-0"
+        />
+      )}
+      {showSavePrompt && !isSpeaking && (
+        <ActionButton
+          label="SALVAR"
+          icon="⭐"
+          onClick={onSavePhrase}
+          variant="save"
           className="px-5 text-lg shrink-0"
         />
       )}

@@ -306,6 +306,26 @@ export function SettingsPanel({
             </div>
           </div>
 
+          {/* Speak letters */}
+          <div className="flex items-center justify-between">
+            <span className="text-xl font-bold">Falar Nome das Letras</span>
+            <button
+              type="button"
+              onClick={() => onUpdate({ speakLetters: !settings.speakLetters })}
+              className={`
+                px-6 py-3 rounded-lg font-bold text-lg cursor-pointer
+                transition-colors duration-150
+                ${
+                  settings.speakLetters
+                    ? 'bg-speak text-white'
+                    : 'bg-gray-300 text-gray-600'
+                }
+              `}
+            >
+              {settings.speakLetters ? 'LIGADO' : 'DESLIGADO'}
+            </button>
+          </div>
+
           {/* Key sound */}
           <div className="flex items-center justify-between">
             <span className="text-xl font-bold">Som ao Teclar</span>

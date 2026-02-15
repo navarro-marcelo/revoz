@@ -6,6 +6,7 @@ export interface AppSettings {
   pitch: number;
   fontSize: number;
   keySound: boolean;
+  speakLetters: boolean;
   voiceProvider: VoiceProvider;
   elevenLabsVoiceId: string;
   elevenLabsVoiceName: string;
@@ -25,6 +26,7 @@ export const defaultSettings: AppSettings = {
   pitch: 1.0,
   fontSize: 1,
   keySound: true,
+  speakLetters: false,
   voiceProvider: 'browser',
   elevenLabsVoiceId: '',
   elevenLabsVoiceName: '',

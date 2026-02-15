@@ -10,6 +10,7 @@ import { useAutocomplete } from './hooks/useAutocomplete';
 import { useSettings } from './hooks/useSettings';
 import { replacePartialWord, deleteLastWord, getCurrentPartialWord, normalize } from './utils/textProcessor';
 import { saveRecentPhrase, savePhraseToBank } from './utils/storageManager';
+import { letterNames } from './data/letterNames';
 
 interface AppState {
   currentText: string;
@@ -88,7 +89,7 @@ const initialState: AppState = {
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { settings, updateSettings, resetSettings } = useSettings();
-  const { speak, stop, isSpeaking } = useSpeech(settings);
+  const { speak, stop, speakLetter, isSpeaking } = useSpeech(settings);
   const { suggestions, learnWord } = useAutocomplete(state.currentText);
 
   function learnCurrentWords(text: string) {
@@ -146,6 +147,10 @@ export default function App() {
           }}
           onDelete={() => dispatch({ type: 'DELETE_CHAR' })}
           keySound={settings.keySound}
+          onSpeakLetter={settings.speakLetters ? (char) => {
+            const name = letterNames[char.toLowerCase()];
+            if (name) speakLetter(name);
+          } : undefined}
         />
       </div>
 
