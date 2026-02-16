@@ -41,7 +41,7 @@ export function SettingsPanel({
           {/* Voice provider toggle */}
           <div>
             <label className="block text-xl font-bold mb-2">
-              Motor de Voz
+              MOTOR DE VOZ
             </label>
             <div className="flex gap-3">
               <button
@@ -74,7 +74,7 @@ export function SettingsPanel({
             </div>
             {!apiConfigured && (
               <p className="text-sm text-gray-400 mt-1">
-                Chave da API nao configurada
+                CHAVE DA API NAO CONFIGURADA
               </p>
             )}
           </div>
@@ -85,7 +85,7 @@ export function SettingsPanel({
               {/* Voice source toggle */}
               <div>
                 <label className="block text-xl font-bold mb-2">
-                  Origem da Voz
+                  ORIGEM DA VOZ
                 </label>
                 <div className="flex gap-3">
                   <button
@@ -121,10 +121,10 @@ export function SettingsPanel({
                 /* Pre-built voice dropdown */
                 <div>
                   <label className="block text-xl font-bold mb-2">
-                    Voz ElevenLabs
+                    VOZ ELEVENLABS
                   </label>
                   {loading && (
-                    <p className="text-gray-500">Carregando vozes...</p>
+                    <p className="text-gray-500">CARREGANDO VOZES...</p>
                   )}
                   {error && (
                     <p className="text-red-500 text-sm">Erro: {error}</p>
@@ -143,7 +143,7 @@ export function SettingsPanel({
                       }}
                       className="w-full h-12 px-3 rounded-lg border-2 border-gray-300 text-lg bg-white cursor-pointer"
                     >
-                      <option value="">Selecione uma voz</option>
+                      <option value="">SELECIONE UMA VOZ</option>
                       {voices.map((v) => (
                         <option key={v.voice_id} value={v.voice_id}>
                           {v.name} ({v.category})
@@ -157,7 +157,7 @@ export function SettingsPanel({
                 <div className="space-y-4">
                   <div>
                     <label className="block text-xl font-bold mb-2">
-                      ID da Voz
+                      ID DA VOZ
                     </label>
                     <input
                       type="text"
@@ -165,13 +165,13 @@ export function SettingsPanel({
                       onChange={(e) =>
                         onUpdate({ elevenLabsCustomVoiceId: e.target.value })
                       }
-                      placeholder="Cole o ID da voz do ElevenLabs"
+                      placeholder="COLE O ID DA VOZ DO ELEVENLABS"
                       className="w-full h-12 px-3 rounded-lg border-2 border-gray-300 text-lg"
                     />
                   </div>
                   <div>
                     <label className="block text-lg font-bold mb-2">
-                      Nome (opcional)
+                      NOME (OPCIONAL)
                     </label>
                     <input
                       type="text"
@@ -179,7 +179,7 @@ export function SettingsPanel({
                       onChange={(e) =>
                         onUpdate({ elevenLabsCustomVoiceName: e.target.value })
                       }
-                      placeholder="Nome para identificar a voz"
+                      placeholder="NOME PARA IDENTIFICAR A VOZ"
                       className="w-full h-12 px-3 rounded-lg border-2 border-gray-300 text-lg"
                     />
                   </div>
@@ -189,18 +189,18 @@ export function SettingsPanel({
               {/* Model selector (for custom voices) */}
               {settings.elevenLabsVoiceSource === 'custom' && (
                 <div>
-                  <label className="block text-xl font-bold mb-2">Modelo</label>
+                  <label className="block text-xl font-bold mb-2">MODELO</label>
                   <div className="flex gap-3">
                     {[
                       {
                         id: 'eleven_multilingual_v2',
                         label: 'MULTILINGUAL V2',
-                        desc: 'Maior qualidade',
+                        desc: 'MAIOR QUALIDADE',
                       },
                       {
                         id: 'eleven_turbo_v2_5',
                         label: 'TURBO V2.5',
-                        desc: 'Menor latencia',
+                        desc: 'MENOR LATENCIA',
                       },
                     ].map((model) => (
                       <button
@@ -231,7 +231,7 @@ export function SettingsPanel({
           {!isElevenLabs && (
             <div>
               <label className="block text-xl font-bold mb-2">
-                Velocidade da Voz: {settings.voiceSpeed.toFixed(2)}
+                VELOCIDADE DA VOZ: {settings.voiceSpeed.toFixed(2)}
               </label>
               <input
                 type="range"
@@ -245,8 +245,8 @@ export function SettingsPanel({
                 className="w-full h-12 cursor-pointer accent-suggestion"
               />
               <div className="flex justify-between text-sm text-gray-500">
-                <span>Devagar</span>
-                <span>Rapido</span>
+                <span>DEVAGAR</span>
+                <span>RAPIDO</span>
               </div>
             </div>
           )}
@@ -255,7 +255,7 @@ export function SettingsPanel({
           {!isElevenLabs && (
             <div>
               <label className="block text-xl font-bold mb-2">
-                Tom da Voz: {settings.pitch.toFixed(2)}
+                TOM DA VOZ: {settings.pitch.toFixed(2)}
               </label>
               <input
                 type="range"
@@ -269,8 +269,8 @@ export function SettingsPanel({
                 className="w-full h-12 cursor-pointer accent-suggestion"
               />
               <div className="flex justify-between text-sm text-gray-500">
-                <span>Grave</span>
-                <span>Agudo</span>
+                <span>GRAVE</span>
+                <span>AGUDO</span>
               </div>
             </div>
           )}
@@ -278,13 +278,13 @@ export function SettingsPanel({
           {/* Font size */}
           <div>
             <label className="block text-xl font-bold mb-3">
-              Tamanho da Fonte
+              TAMANHO DA FONTE
             </label>
             <div className="flex gap-3">
               {[
-                { value: 0, label: 'Normal' },
-                { value: 1, label: 'Grande' },
-                { value: 2, label: 'Muito Grande' },
+                { value: 0, label: 'NORMAL' },
+                { value: 1, label: 'GRANDE' },
+                { value: 2, label: 'MUITO GRANDE' },
               ].map((opt) => (
                 <button
                   key={opt.value}
@@ -308,7 +308,7 @@ export function SettingsPanel({
 
           {/* Speak letters */}
           <div className="flex items-center justify-between">
-            <span className="text-xl font-bold">Falar Nome das Letras</span>
+            <span className="text-xl font-bold">FALAR NOME DAS LETRAS</span>
             <button
               type="button"
               onClick={() => onUpdate({ speakLetters: !settings.speakLetters })}
@@ -328,7 +328,7 @@ export function SettingsPanel({
 
           {/* Key sound */}
           <div className="flex items-center justify-between">
-            <span className="text-xl font-bold">Som ao Teclar</span>
+            <span className="text-xl font-bold">SOM AO TECLAR</span>
             <button
               type="button"
               onClick={() => onUpdate({ keySound: !settings.keySound })}
