@@ -37,7 +37,7 @@ type Action =
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
     case 'APPEND_CHAR':
-      return { ...state, currentText: state.currentText + action.char, showSavePrompt: false };
+      return { ...state, currentText: state.currentText + action.char.toUpperCase(), showSavePrompt: false };
     case 'DELETE_CHAR':
       return { ...state, currentText: state.currentText.slice(0, -1), showSavePrompt: false };
     case 'DELETE_WORD':
@@ -54,13 +54,13 @@ function reducer(state: AppState, action: Action): AppState {
     case 'SELECT_SUGGESTION':
       return {
         ...state,
-        currentText: replacePartialWord(state.currentText, action.word),
+        currentText: replacePartialWord(state.currentText, action.word).toUpperCase(),
         showSavePrompt: false,
       };
     case 'SELECT_PHRASE':
       return {
         ...state,
-        currentText: action.phrase,
+        currentText: action.phrase.toUpperCase(),
         showQuickPhrases: false,
       };
     case 'TOGGLE_QUICK_PHRASES':
