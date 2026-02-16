@@ -171,14 +171,14 @@ export default function App() {
           settings={settings}
           onUpdate={updateSettings}
           onReset={resetSettings}
-          onTestVoice={() => speak('Ola, eu sou a voz do REVOZ.')}
+          onTestVoice={() => speak('OLA, EU SOU A VOZ DO REVOZ.')}
           onClose={() => dispatch({ type: 'TOGGLE_SETTINGS' })}
         />
       )}
 
       {state.showClearConfirm && (
         <ConfirmModal
-          message="Tem certeza que deseja limpar todo o texto?"
+          message="TEM CERTEZA QUE DESEJA LIMPAR TODO O TEXTO?"
           onConfirm={() => dispatch({ type: 'CLEAR_TEXT' })}
           onCancel={() => dispatch({ type: 'TOGGLE_CLEAR_CONFIRM' })}
         />

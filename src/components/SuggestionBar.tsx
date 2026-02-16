@@ -10,7 +10,7 @@ export function SuggestionBar({ suggestions, onSelect }: SuggestionBarProps) {
     return (
       <div className="flex items-center justify-center h-full px-4">
         <span className="text-gray-400 text-lg">
-          Toque nas letras para ver sugestoes...
+          TOQUE NAS LETRAS PARA VER SUGESTOES...
         </span>
       </div>
     );
@@ -21,7 +21,7 @@ export function SuggestionBar({ suggestions, onSelect }: SuggestionBarProps) {
       {suggestions.map((word) => (
         <ActionButton
           key={word}
-          label={word}
+          label={word.toUpperCase()}
           onClick={() => onSelect(word)}
           variant="suggestion"
           className="flex-1 text-xl min-h-[48px]"

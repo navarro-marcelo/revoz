@@ -54,7 +54,7 @@ export function QuickPhrases({ onSelectPhrase, onClose }: QuickPhrasesProps) {
             `}
           >
             <span className="text-2xl">⭐</span>
-            <span>Minhas Frases</span>
+            <span>MINHAS FRASES</span>
           </button>
           {phraseCategories.map((cat) => (
             <button
@@ -73,7 +73,7 @@ export function QuickPhrases({ onSelectPhrase, onClose }: QuickPhrasesProps) {
               `}
             >
               <span className="text-2xl">{cat.icon}</span>
-              <span>{cat.label}</span>
+              <span>{cat.label.toUpperCase()}</span>
             </button>
           ))}
         </div>
@@ -83,14 +83,14 @@ export function QuickPhrases({ onSelectPhrase, onClose }: QuickPhrasesProps) {
           {isSavedTab ? (
             savedPhrases.length === 0 ? (
               <div className="flex items-center justify-center h-full text-gray-400 text-xl text-center px-6">
-                Nenhuma frase salva ainda. Digite uma frase, clique FALAR, e depois SALVAR.
+                NENHUMA FRASE SALVA AINDA. DIGITE UMA FRASE, CLIQUE FALAR, E DEPOIS SALVAR.
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-3">
                 {savedPhrases.map((phrase) => (
                   <div key={phrase} className="flex gap-2">
                     <ActionButton
-                      label={phrase}
+                      label={phrase.toUpperCase()}
                       onClick={() => onSelectPhrase(phrase)}
                       variant="save"
                       className="min-h-[56px] text-lg px-4 text-left justify-start flex-1"
@@ -111,7 +111,7 @@ export function QuickPhrases({ onSelectPhrase, onClose }: QuickPhrasesProps) {
               {category!.phrases.map((phrase) => (
                 <ActionButton
                   key={phrase}
-                  label={phrase}
+                  label={phrase.toUpperCase()}
                   onClick={() => onSelectPhrase(phrase)}
                   variant="phrase"
                   className="min-h-[56px] text-lg px-4 text-left justify-start"
