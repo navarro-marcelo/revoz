@@ -34,6 +34,7 @@ src/
 │   ├── accentMap.ts           # Mapeamento normalizado -> acentuado (345 entradas)
 │   ├── bigrams.ts             # Pares de palavras com score (contexto linguistico)
 │   ├── dictionary.ts          # Vocabulario portugues com frequencia (~500+ palavras)
+│   ├── letterNames.ts         # Nomes das letras/numeros em pt-BR (a=á, b=bê, c=cê...)
 │   └── phrases.ts             # Frases rapidas organizadas em 5 categorias
 ├── services/
 │   └── elevenLabsApi.ts       # Cliente API ElevenLabs (vozes + sintese)
@@ -48,7 +49,7 @@ src/
 
 | Zona | Altura | Componente | Funcao |
 |------|--------|------------|--------|
-| 1 | 20% | `TextDisplay` | Texto digitado + botoes FALAR/SALVAR/PARAR/FRASES/etc |
+| 1 | 20% | `TextDisplay` | Texto digitado + botoes FALAR/PARAR + SALVAR (independente) + FRASES/etc |
 | 2 | 15% | `SuggestionBar` | Top 5 sugestoes de palavras |
 | 3 | 65% | `AlphaKeyboard` | Teclado virtual A-Z + numeros |
 
@@ -107,10 +108,12 @@ Area de exibicao do texto com cursor animado. Botoes de acao:
 - **FRASES** — abre modal de frases rapidas
 - **⚙** — abre configuracoes
 
-**Fluxo do botao SALVAR:**
-1. Usuario clica FALAR → botao vira SALVAR
-2. Se clicar SALVAR → frase e salva no localStorage, botao volta a FALAR
-3. Se digitar qualquer coisa → botao volta a FALAR (sem salvar)
+**Fluxo do botao SALVAR (independente):**
+FALAR fica sempre visivel. SALVAR aparece como botao separado ao lado apos falar.
+Layout: `[FALAR/PARAR] [SALVAR?] [↩] [🗑] [FRASES] [⚙]`
+1. Usuario clica FALAR → botao SALVAR aparece ao lado do FALAR
+2. Se clicar SALVAR → frase e salva no localStorage, SALVAR desaparece
+3. Se digitar qualquer coisa → SALVAR desaparece
 
 ### AlphaKeyboard
 
@@ -119,6 +122,7 @@ Teclado virtual com layout otimizado para CAA:
 - Toggle para teclado numerico (0-9)
 - Botao ESPACO e APAGAR
 - Som de tecla opcional (beep 800Hz, 50ms)
+- Falar nome das letras opcional (prop `onSpeakLetter`)
 
 ### SuggestionBar
 
@@ -149,6 +153,7 @@ Modal com abas de categorias de frases:
   - Velocidade da voz: 0.5 - 1.5 (padrao 0.85)
   - Tom da voz: 0.5 - 2.0 (padrao 1.0)
 - Tamanho da fonte: Normal / Grande / Muito Grande
+- Falar Nome das Letras: ligado/desligado (padrao desligado) — fala o nome pt-BR de cada letra/numero ao teclar
 - Som das teclas: ligado/desligado
 - Botao testar voz (usa motor ativo)
 - Botao restaurar padroes
@@ -165,10 +170,11 @@ Modal generico com mensagem + botoes SIM / NAO.
 
 Sintese de voz com dois motores: **Web Speech API** (padrao) e **ElevenLabs** (opcional).
 - Detecta melhor voz portuguesa (pt-BR preferido, fallback pt) para Web Speech
-- Retorna: `{ speak, stop, isSpeaking, voiceReady }` (mesma interface para ambos motores)
+- Retorna: `{ speak, stop, speakLetter, isSpeaking, voiceReady }` (mesma interface para ambos motores)
 - Cancela utterance/audio anterior automaticamente
 - **Fallback silencioso:** se ElevenLabs falhar (rede, quota, erro), usa Web Speech sem intervencao do usuario
 - `stop()` cancela tanto `speechSynthesis` quanto `AbortController` + `HTMLAudioElement`
+- `speakLetter(name)` — utterance curta (rate 1.5, pt-BR) para falar nomes de letras; nao afeta `isSpeaking`
 
 ### useElevenLabsVoices()
 
@@ -239,6 +245,10 @@ Pares de palavras com score (1-10) para predicao contextual. Ex: "eu" → "quero
 ### phrases.ts
 
 5 categorias de frases rapidas pre-definidas (saude, necessidades, social, sentimentos, pedidos). ~10 frases por categoria.
+
+### letterNames.ts
+
+Mapa de nomes das letras e numeros em portugues brasileiro. A-Z + Ç + 0-9. Ex: "a" → "á", "b" → "bê", "1" → "um". Usado pela funcao `speakLetter` quando a opcao "Falar Nome das Letras" esta ativada.
 
 ### accentMap.ts
 
@@ -325,10 +335,10 @@ Configurado em `vite.config.ts`:
 
 ## Fluxo Principal do Usuario
 
-1. **Digitar:** Teclado virtual → caracteres aparecem na area de texto
+1. **Digitar:** Teclado virtual → caracteres aparecem na area de texto (opcionalmente fala o nome da letra)
 2. **Completar:** Sugestoes aparecem na barra → clicar para completar palavra
 3. **Falar:** Clicar FALAR → voz sintetizada le o texto
-4. **Salvar frase:** Apos falar, clicar SALVAR → frase armazenada no banco pessoal
+4. **Salvar frase:** Apos falar, botao SALVAR aparece ao lado do FALAR → clicar para salvar no banco pessoal
 5. **Reutilizar:** Abrir FRASES → aba Minhas Frases → clicar para falar novamente
 6. **Frases rapidas:** Abrir FRASES → escolher categoria → clicar frase pre-definida
 
